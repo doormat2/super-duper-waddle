@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaming Clips Showcase</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #fff;
+        }
+        header {
+            background-color: #1e1e1e;
+            padding: 1rem;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+        }
+        main {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+        }
+        .clip {
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        .clip video {
+            width: 100%;
+            display: block;
+        }
+        .clip h2 {
+            margin: 0;
+            padding: 0.5rem;
+            font-size: 1.2rem;
+            background-color: #272727;
+        }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #1e1e1e;
+        }
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>My Gaming Clips</h1>
+        <p>Check out some of my favorite gaming moments!</p>
+    </header>
+    <main>
+        <div class="clip">
+            <video controls>
+                <source src="clip1.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <h2>Epic Headshot</h2>
+        </div>
+        <div class="clip">
+            <video controls>
+                <source src="clip2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <h2>Team Victory</h2>
+        </div>
+        <div class="clip">
+            <video controls>
+                <source src="clip3.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <h2>Insane Trickshot</h2>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2025 My Gaming Clips</p>
+    </footer>
+</body>
+</html>
