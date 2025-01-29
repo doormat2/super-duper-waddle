@@ -28,10 +28,11 @@
             color: #99aab5;
         }
         main {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
             gap: 1.5rem;
             padding: 2rem;
+            justify-content: center;
         }
         .clip {
             background-color: #99aab5;
@@ -39,6 +40,7 @@
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
             transition: transform 0.3s, box-shadow 0.3s;
+            width: 300px;
         }
         .clip:hover {
             transform: translateY(-5px);
@@ -47,6 +49,7 @@
         .clip video {
             width: 100%;
             display: block;
+            cursor: pointer;
         }
         .clip h2 {
             margin: 0;
@@ -55,6 +58,66 @@
             background-color: #2c2f33;
             color: #7289da;
             text-align: center;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: #23272a;
+            padding: 2rem;
+            border-radius: 10px;
+            color: #dcdde1;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+        .modal-content video {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .modal-content h2 {
+            margin: 1rem 0;
+            font-size: 1.5rem;
+            color: #7289da;
+        }
+        .modal-content textarea {
+            width: 100%;
+            height: 100px;
+            margin: 1rem 0;
+            border-radius: 5px;
+            border: none;
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
+        .modal-content button {
+            background-color: #7289da;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .modal-content button:hover {
+            background-color: #5a73bd;
+        }
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #dcdde1;
         }
         footer {
             text-align: center;
@@ -70,41 +133,63 @@
 </head>
 <body>
     <header>
-        <h1>My Gaming Clips</h1>
-        <p>Gaming Moments!</p>
+        <h1>Gaming Clips</h1>
+        <p>My favorite gaming moments!</p>
     </header>
     <main>
-        <div class="clip">
-            <video controls>
+        <div class="clip" onclick="openModal('clip1.mp4', 'splatoon 3 falloff')">
+            <video>
                 <source src="video/clip1.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
-            <h2>Splatoon 3 Falloff</h2>
+            <h2>splatoon 3 falloff</h2>
         </div>
-        <div class="clip">
-            <video controls>
+        <div class="clip" onclick="openModal('clip2.mp4', 'paranoia dt')">
+            <video>
                 <source src="video/clip2.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
             <h2>paranoia dt</h2>
         </div>
-        <div class="clip">
-            <video controls>
+        <div class="clip" onclick="openModal('clip3.mp4', 'Sink and I sketch some basic lines')">
+            <video>
                 <source src="video/clip3.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
-            <h2>Start sketching some basic lines</h2>
-        </div>
-        <div class="clip">
-            <video controls>
-                <source src="video/clip4.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-            <h2>test for clip4</h2>
+            <h2>Sink and I sketch some basic lines</h2>
         </div>
     </main>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <video controls id="modal-video"></video>
+            <h2 id="modal-title"></h2>
+            <textarea placeholder="Add a comment..."></textarea>
+            <button>Submit Comment</button>
+        </div>
+    </div>
+
     <footer>
-        <p>&copy; 2025 Philly. All rights reserved.</p>
+        <p>&copy; 2025 Philly Clips. All rights reserved.</p>
     </footer>
+
+    <script>
+        function openModal(videoSrc, title) {
+            const modal = document.getElementById('modal');
+            const modalVideo = document.getElementById('modal-video');
+            const modalTitle = document.getElementById('modal-title');
+            modalVideo.src = videoSrc;
+            modalTitle.textContent = title;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            const modalVideo = document.getElementById('modal-video');
+            modal.style.display = 'none';
+            modalVideo.src = '';
+        }
+    </script>
 </body>
 </html>
