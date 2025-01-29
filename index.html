@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phil's Clips</title>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -30,11 +28,10 @@
             color: #99aab5;
         }
         main {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
             padding: 2rem;
-            justify-content: center;
         }
         .clip {
             background-color: #99aab5;
@@ -42,7 +39,6 @@
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
             transition: transform 0.3s, box-shadow 0.3s;
-            width: 300px;
         }
         .clip:hover {
             transform: translateY(-5px);
@@ -51,7 +47,6 @@
         .clip video {
             width: 100%;
             display: block;
-            cursor: pointer;
         }
         .clip h2 {
             margin: 0;
@@ -61,144 +56,48 @@
             color: #7289da;
             text-align: center;
         }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .modal-content {
-            background-color: #23272a;
-            padding: 2rem;
-            border-radius: 10px;
-            color: #dcdde1;
-            max-width: 600px;
-            width: 90%;
+        footer {
             text-align: center;
-            position: relative;
+            padding: 1.5rem;
+            background-color: #23272a;
+            color: #99aab5;
         }
-        .modal-content video {
-            width: 100%;
-            border-radius: 10px;
-        }
-        .modal-content h2 {
-            margin: 1rem 0;
-            font-size: 1.5rem;
-            color: #7289da;
-        }
-        .modal-content textarea {
-            width: 100%;
-            height: 100px;
-            margin: 1rem 0;
-            border-radius: 5px;
-            border: none;
-            padding: 0.5rem;
-            font-size: 1rem;
-        }
-        .modal-content button {
-            background-color: #7289da;
-            color: #fff;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        .modal-content button:hover {
-            background-color: #5a73bd;
-        }
-        .modal-close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #dcdde1;
-        }
-        .comments {
-            text-align: left;
-            margin-top: 1rem;
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Gaming Clips</h1>
-        <p>My favorite gaming moments!</p>
+        <h1>My Gaming Clips</h1>
+        <p>Gaming Moments!</p>
     </header>
     <main>
-        <div class="clip" onclick="openModal('clip1.mp4', 'Splatoon 3 Falloff')">
-            <video src="clip1.mp4"></video>
+        <div class="clip">
+            <video controls>
+                <source src="video/clip1.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
             <h2>Splatoon 3 Falloff</h2>
         </div>
-        <div class="clip" onclick="openModal('clip2.mp4', 'paranoia dt')">
-            <video src="clip1.mp4"></video>
+        <div class="clip">
+            <video controls>
+                <source src="video/clip2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
             <h2>paranoia dt</h2>
         </div>
-        <div class="clip" onclick="openModal('clip3.mp4', 'sink and I sketch some basic lines')">
-            <video src="clip1.mp4"></video>
-            <h2>sink and I sketch some basic lines</h2>
+        <div class="clip">
+            <video controls>
+                <source src="video/clip3.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <h2>Start sketching some basic lines</h2>
         </div>
     </main>
-
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal()">&times;</span>
-            <video controls id="modal-video"></video>
-            <h2 id="modal-title"></h2>
-            <textarea id="comment-input" placeholder="Add a comment..."></textarea>
-            <button onclick="submitComment()">Submit Comment</button>
-            <div class="comments" id="comments-list"></div>
-        </div>
-    </div>
-
-    <script>
-        const firebaseConfig = { 
-          apiKey: "AIzaSyADvHBbgBuKuzaGN2QKOeJZkovL8lVMsIE",
-          authDomain: "clipsdb-4284d.firebaseapp.com",
-          projectId: "clipsdb-4284d",
-          storageBucket: "clipsdb-4284d.firebasestorage.app",
-          messagingSenderId: "221064281998",
-          appId: "1:221064281998:web:1d76431d896961437eaedf"
-         };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
-        function openModal(videoSrc, title) {
-            document.getElementById('modal-video').src = videoSrc;
-            document.getElementById('modal-title').textContent = title;
-            document.getElementById('modal').style.display = 'flex';
-            loadComments(title);
-        }
-
-        function closeModal() {
-            document.getElementById('modal').style.display = 'none';
-            document.getElementById('modal-video').src = '';
-        }
-
-        function submitComment() {
-            let comment = document.getElementById('comment-input').value;
-            let title = document.getElementById('modal-title').textContent;
-            db.collection('comments').add({ clip: title, text: comment });
-            document.getElementById('comment-input').value = '';
-        }
-
-        function loadComments(title) {
-            document.getElementById('comments-list').innerHTML = '';
-            db.collection('comments').where("clip", "==", title).get().then(snapshot => {
-                snapshot.forEach(doc => {
-                    let comment = document.createElement('p');
-                    comment.textContent = doc.data().text;
-                    document.getElementById('comments-list').appendChild(comment);
-                });
-            });
-        }
-    </script>
+    <footer>
+        <p>&copy; 2025 Philly. All rights reserved.</p>
+    </footer>
 </body>
 </html>
