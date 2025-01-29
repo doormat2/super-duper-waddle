@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phil's Clips</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -119,15 +121,9 @@
             cursor: pointer;
             color: #dcdde1;
         }
-        footer {
-            text-align: center;
-            padding: 1.5rem;
-            background-color: #23272a;
-            color: #99aab5;
-        }
-        footer p {
-            margin: 0;
-            font-size: 0.9rem;
+        .comments {
+            text-align: left;
+            margin-top: 1rem;
         }
     </style>
 </head>
@@ -137,26 +133,17 @@
         <p>My favorite gaming moments!</p>
     </header>
     <main>
-        <div class="clip" onclick="openModal('clip1.mp4', 'splatoon 3 falloff')">
-            <video>
-                <source src="video/clip1.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-            <h2>splatoon 3 falloff</h2>
+        <div class="clip" onclick="openModal('clip1.mp4', 'Splatoon 3 Falloff')">
+            <video src="clip1.mp4"></video>
+            <h2>Splatoon 3 Falloff</h2>
         </div>
         <div class="clip" onclick="openModal('clip2.mp4', 'paranoia dt')">
-            <video>
-                <source src="video/clip2.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+            <video src="clip1.mp4"></video>
             <h2>paranoia dt</h2>
         </div>
-        <div class="clip" onclick="openModal('clip3.mp4', 'Sink and I sketch some basic lines')">
-            <video>
-                <source src="video/clip3.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-            <h2>Sink and I sketch some basic lines</h2>
+        <div class="clip" onclick="openModal('clip3.mp4', 'sink and I sketch some basic lines')">
+            <video src="clip1.mp4"></video>
+            <h2>sink and I sketch some basic lines</h2>
         </div>
     </main>
 
@@ -165,30 +152,52 @@
             <span class="modal-close" onclick="closeModal()">&times;</span>
             <video controls id="modal-video"></video>
             <h2 id="modal-title"></h2>
-            <textarea placeholder="Add a comment..."></textarea>
-            <button>Submit Comment</button>
+            <textarea id="comment-input" placeholder="Add a comment..."></textarea>
+            <button onclick="submitComment()">Submit Comment</button>
+            <div class="comments" id="comments-list"></div>
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2025 Philly Clips. All rights reserved.</p>
-    </footer>
-
     <script>
+        const firebaseConfig = { 
+          apiKey: "AIzaSyADvHBbgBuKuzaGN2QKOeJZkovL8lVMsIE",
+          authDomain: "clipsdb-4284d.firebaseapp.com",
+          projectId: "clipsdb-4284d",
+          storageBucket: "clipsdb-4284d.firebasestorage.app",
+          messagingSenderId: "221064281998",
+          appId: "1:221064281998:web:1d76431d896961437eaedf"
+         };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
         function openModal(videoSrc, title) {
-            const modal = document.getElementById('modal');
-            const modalVideo = document.getElementById('modal-video');
-            const modalTitle = document.getElementById('modal-title');
-            modalVideo.src = videoSrc;
-            modalTitle.textContent = title;
-            modal.style.display = 'flex';
+            document.getElementById('modal-video').src = videoSrc;
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal').style.display = 'flex';
+            loadComments(title);
         }
 
         function closeModal() {
-            const modal = document.getElementById('modal');
-            const modalVideo = document.getElementById('modal-video');
-            modal.style.display = 'none';
-            modalVideo.src = '';
+            document.getElementById('modal').style.display = 'none';
+            document.getElementById('modal-video').src = '';
+        }
+
+        function submitComment() {
+            let comment = document.getElementById('comment-input').value;
+            let title = document.getElementById('modal-title').textContent;
+            db.collection('comments').add({ clip: title, text: comment });
+            document.getElementById('comment-input').value = '';
+        }
+
+        function loadComments(title) {
+            document.getElementById('comments-list').innerHTML = '';
+            db.collection('comments').where("clip", "==", title).get().then(snapshot => {
+                snapshot.forEach(doc => {
+                    let comment = document.createElement('p');
+                    comment.textContent = doc.data().text;
+                    document.getElementById('comments-list').appendChild(comment);
+                });
+            });
         }
     </script>
 </body>
